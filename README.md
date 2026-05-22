@@ -1,35 +1,69 @@
+
 # Web Application Security Testing — Burp Suite Lab Report
 
 ## Overview
-Practical web application security testing performed on a 
-local vulnerable lab environment as part of TCM Security 
-Practical Bug Bounty course.
+Practical web application penetration testing performed 
+on a local vulnerable lab environment as part of 
+TCM Security Practical Bug Bounty course.
 
 ## Tester
 - Name: Zamzam Hassan
 - Focus: Web Penetration Testing
-- Tools: Burp Suite, curl, ffuf, nmap, Docker
-
-## Environment
 - OS: Kali Linux
-- Target: localhost (Bug Bounty Labs)
-- Lab Setup: Docker
+- Tools: Burp Suite, ffuf
 
-## Labs Completed
-| Lab | Type | Status |
-|-----|------|--------|
-| Auth 0x01 | Authentication Bypass | ✅ |
-| Auth 0x02 | MFA Bypass | ✅ |
-| Auth 0x03 | Authorization/IDOR | ✅ |
+## Target
+- URL: http://localhost (Bug Bounty Labs)
+- Type: Local vulnerable web application
+- Setup: Docker
 
-## Tools Used
-- Burp Suite — intercept and modify requests
-- curl — fingerprinting and API testing
-- ffuf — directory enumeration
-- nmap — port scanning and service detection
+## Vulnerabilities Found
+
+### 1. Username Enumeration + Brute Force
+- Lab: Auth 0x01
+- Severity: High
+- Tool: Burp Suite Intruder
+
+### 2. MFA Bypass
+- Lab: Auth 0x02
+- Severity: Critical
+- Tool: Burp Suite Intruder
+
+### 3. IDOR (Insecure Direct Object Reference)
+- Lab: Auth 0x03
+- Severity: High
+- Tool: Burp Suite
+
+### 4. IDOR via Account Fuzzing
+- Lab: Auth 0x02
+- Severity: High
+- Tool: ffuf
+
+### 5. Password Brute Force
+- Lab: Auth 0x01
+- Severity: High
+- Tool: ffuf
+
+## Commands Used
+```bash
+# IDOR account fuzzing
+ffuf -u 'http://localhost/labs/e0x02.php?account=FUZZ' \
+     -w num.txt -mr 'admin'
+
+# Password brute force
+ffuf -request req.txt -request-proto http \
+     -w /usr/share/seclists/Passwords/Common-Credentials/\
+xato-net-10-million-passwords-10000.txt
+```
+
+## Screenshots
+All proof of concept screenshots are in the 
+screenshots/ folder
 
 ## Skills Demonstrated
-- HTTP request interception and manipulation
-- Authentication attack techniques
+- Burp Suite interception and manipulation
 - Burp Suite Intruder for fuzzing
-- API security testing
+- IDOR vulnerability testing
+- MFA bypass techniques
+- Password brute forcing with ffuf
+- Authentication attack techniques
